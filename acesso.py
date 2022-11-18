@@ -6,7 +6,7 @@ import os
 import senha
 
 username = os.environ['username'] 
-password = os.environ['password'] 
+password = os.environ['password']
 
 API = "https://levyauthserver.smarapd.com.br/connect/token"
 data = {
@@ -29,7 +29,7 @@ def GetMensagemTemplate(idComercial, idInterno): #GET
         print(json.dumps(resposta.json(), indent=3))
     else:
         print(resposta.text)
-    menu()
+    #menu()
 
 def GetMensagensTemplatesByIdComercial(idComercial): #GET
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/GetMensagensTemplatesByIdComercial'
@@ -39,7 +39,7 @@ def GetMensagensTemplatesByIdComercial(idComercial): #GET
         print(json.dumps(resposta.json(), indent=3))
     else:
         print(resposta.text)
-    menu()
+    #menu()
 
 def EstornaOSWhatsApp(idos): #DELETE
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/EstornaOSWhatsApp'
@@ -49,7 +49,7 @@ def EstornaOSWhatsApp(idos): #DELETE
         print(json.dumps(resposta.json(), indent=3))
     else:
         print(resposta.text)
-    menu()
+    #menu()
 
 def IniciaOsWhatsApp(idos, idOsEletronico): #POST                                                                                         
         url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/IniciaOsWhatsApp'
@@ -85,7 +85,7 @@ def GetOSProcessamentoPendente(): #GET
         print(json.dumps(resposta.json(), indent=3))
     else:
         print(resposta.text)
-    menu()
+    #menu()
 
 #a=1081878
 #b=1029660
@@ -119,9 +119,6 @@ opcao:  '''))
     elif opc == 5:
         sys.exit()
     else:
-        print("opção invalida, tente novamente.\n")
+        print("opï¿½ï¿½o invalida, tente novamente.\n")
         
-menu()
-#Os = 1081878
-#idcomercial = 855
-#idinterna = 20604
+#menu()
