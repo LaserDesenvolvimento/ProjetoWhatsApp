@@ -119,7 +119,7 @@ opcao:  '''))
     elif opc == 5:
         sys.exit()
     else:
-        print("opção invalida, tente novamente.\n")
+        print("opï¿½ï¿½o invalida, tente novamente.\n")
         
 menu()
 #Os = 1081878
