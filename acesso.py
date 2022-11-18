@@ -3,7 +3,6 @@ import json
 import json
 import sys
 import os
-import senha
 
 username = os.environ['username'] 
 password = os.environ['password']
