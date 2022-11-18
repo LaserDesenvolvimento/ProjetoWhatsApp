@@ -3,6 +3,7 @@ import json
 import json
 import sys
 import os
+import senha
 
 username = os.environ['username'] 
 password = os.environ['password']
@@ -118,6 +119,6 @@ opcao:  '''))
     elif opc == 5:
         sys.exit()
     else:
-        print("op��o invalida, tente novamente.\n")
+        print("opção invalida, tente novamente.\n")
         
 #menu()
