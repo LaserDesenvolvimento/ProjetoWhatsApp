@@ -5,8 +5,8 @@ import sys
 import os
 import senha
 
-username = os.environ['username'] 
-password = os.environ['password']
+#username = os.environ['username'] 
+#password = os.environ['password']
 
 API = "https://levyauthserver.smarapd.com.br/connect/token"
 data = {
