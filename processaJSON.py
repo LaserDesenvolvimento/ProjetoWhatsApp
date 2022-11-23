@@ -2,6 +2,7 @@ import csv
 import cliente
 import acesso
 import json
+import os
 
 ArquivoDados = {}
 DadosProcessamentoWhatsAppDTO = {}
@@ -18,7 +19,7 @@ def make_json(csvFilePath):
 
 def arquivoJSON(ArquivoDados, IdOS, IdOSEletronico):
     dadosOs = cliente.OsWhatsAppProcessamentoDTO(acesso.IniciaOsWhatsApp(IdOS, IdOSEletronico).replace('"',""))
-
+    GuidOs = dadosOs.GuidOsWhatsAppEnvio
     for i in range(len(ArquivoDados)):        
         dados = cliente.DadosProcessamento(
             ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['NomeConsorciado'],
@@ -32,8 +33,25 @@ def arquivoJSON(ArquivoDados, IdOS, IdOSEletronico):
         DadosProcessamentoWhatsAppDTO["\"DadosProcessamento\""] = json.dumps(dados.__dict__)
         
         DadosProcessamentoReplace = str(DadosProcessamentoWhatsAppDTO).replace("'","")
-        acesso.InsereMensagemTemplate(DadosProcessamentoReplace)
+        acesso.InsereMensagemTemplate(DadosProcessamentoReplace, GuidOs)
 
-csvFilePath = r'CSV_AET001_AET002.csv'
-make_json(csvFilePath)
-arquivoJSON(ArquivoDados, IdOS, IdOSEletronico)
+
+#idcomercial = 855
+#templates = acesso.GetMensagensTemplatesByIdComercial(idcomercial)
+#for key, obs in enumerate(templates):
+#    print(templates[key]['IdInterno'])
+#    print(templates[key]['Observacao'])
+#    #for x in templates[key]['Observacao']:
+#    print('\n')
+
+if os.listdir("arquivos") == []:
+    acesso.menu()
+else:
+    csvFilePath = r'arquivos/CSV_AET001_AET002.csv'
+    make_json(csvFilePath)
+    arquivoJSON(ArquivoDados, IdOS, IdOSEletronico)
+    
+
+
+
+

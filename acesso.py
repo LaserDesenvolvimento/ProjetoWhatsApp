@@ -5,21 +5,24 @@ import sys
 import os
 import senha
 
-#username = os.environ['username'] 
-#password = os.environ['password']
+username = os.environ['username'] 
+password = os.environ['password']
+
+
 
 API = "https://levyauthserver.smarapd.com.br/connect/token"
 data = {
-    "client_secret": "1EBB%lJ73D#F%mSm@r@pdF2$%wU5gT96SBS*F3Kkm5Drb$XgP",
-    "client_id": "22fc194-4827-4af0-9656-6a74047f4fe8",
-    "grant_type": "password",
-    "scope": "data_processing openid",
-    "username": username,
-    "password": password
+"client_secret": "1EBB%lJ73D#F%mSm@r@pdF2$%wU5gT96SBS*F3Kkm5Drb$XgP",
+"client_id": "22fc194-4827-4af0-9656-6a74047f4fe8",
+"grant_type": "password",
+"scope": "data_processing openid",
+"username": username,
+"password": password
 }
 r =  requests.post(url=API, data=data).json()
 token ='Bearer ' + r['access_token']
 headers = {'Authorization': token}
+
 
 def GetMensagemTemplate(idComercial, idInterno): #GET
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/GetMensagemTemplate'
@@ -36,7 +39,8 @@ def GetMensagensTemplatesByIdComercial(idComercial): #GET
     params = {'idComercial':idComercial}
     resposta = requests.get(url, headers=headers, params=params)
     if(resposta.status_code == 200):
-        print(json.dumps(resposta.json(), indent=3))
+        #print(json.dumps(resposta.json(), indent=3))
+        return resposta.json()
     else:
         print(resposta.text)
     #menu()
@@ -62,7 +66,7 @@ def IniciaOsWhatsApp(idos, idOsEletronico): #POST
             print(resposta.text)
             sys.exit(1)
     
-def InsereMensagemTemplate(processaMsg): #POST                                                                                    
+def InsereMensagemTemplate(processaMsg, GuidOs): #POST                                                                                    
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/InsereMensagemTemplate'
     headersjson = {'Authorization': token, 'Content-Type': 'application/json'}
 
@@ -74,7 +78,7 @@ def InsereMensagemTemplate(processaMsg): #POST
             return resposta.text
     else:
         with open(".\\Logs.txt", "w", encoding="ANSI") as new_arq:
-            new_arq.writelines(resposta.text)
+            new_arq.writelines(resposta.text + " GuidOsWhats:" + GuidOs)
             print(resposta.status_code)
             return resposta.text
 
