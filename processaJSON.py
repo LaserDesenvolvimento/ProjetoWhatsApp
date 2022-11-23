@@ -3,6 +3,7 @@ import cliente
 import acesso
 import json
 import os
+import sys
 
 ArquivoDados = {}
 DadosProcessamentoWhatsAppDTO = {}
@@ -36,21 +37,32 @@ def arquivoJSON(ArquivoDados, IdOS, IdOSEletronico):
         acesso.InsereMensagemTemplate(DadosProcessamentoReplace, GuidOs)
 
 
-#idcomercial = 855
-#templates = acesso.GetMensagensTemplatesByIdComercial(idcomercial)
-#for key, obs in enumerate(templates):
-#    print(templates[key]['IdInterno'])
-#    print(templates[key]['Observacao'])
-#    #for x in templates[key]['Observacao']:
-#    print('\n')
+idcomercial = 855
+idnterno = 20586
+variaveisTemplate = acesso.GetMensagemTemplate(idcomercial,idnterno)
+listaVariaveisTemplate=[]
+for key,value in enumerate(variaveisTemplate):
+    if (value == '-'):
+        inicio = key+2
+    if (value == ','):
+        fim = key
+        listaVariaveisTemplate.append(variaveisTemplate[inicio:fim])
+    if (key+1 == len(variaveisTemplate)):
+        fim = key+1
+        listaVariaveisTemplate.append(variaveisTemplate[inicio:fim]) 
 
-if os.listdir("arquivos") == []:
-    acesso.menu()
-else:
-    csvFilePath = r'arquivos/CSV_AET001_AET002.csv'
-    make_json(csvFilePath)
-    arquivoJSON(ArquivoDados, IdOS, IdOSEletronico)
-    
+print (listaVariaveisTemplate)
+
+
+
+csvFilePath = r'arquivos/CSV_AET001_AET002.csv'
+make_json(csvFilePath)
+arquivoJSON(ArquivoDados, IdOS, IdOSEletronico)
+
+#acesso.menu()
+ 
+
+
 
 
 

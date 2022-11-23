@@ -29,7 +29,14 @@ def GetMensagemTemplate(idComercial, idInterno): #GET
     params = {'idComercial':idComercial, 'idInterno':idInterno}
     resposta = requests.get(url, headers=headers, params=params)
     if(resposta.status_code == 200):
-        print(json.dumps(resposta.json(), indent=3))
+        #idcomercial = 855
+        #idnterno = 20586
+        templates = resposta.json()
+        for x in templates:
+            print (x + ':  ' + str(templates[x]))
+        #print(templates['IdInterno'])
+        #print(templates['Observacao'])
+        return templates['Observacao']
     else:
         print(resposta.text)
     #menu()
@@ -50,7 +57,8 @@ def EstornaOSWhatsApp(idos): #DELETE
     params = {'idos':idos}
     resposta = requests.delete(url, headers=headers,params=params)
     if(resposta.status_code == 200):
-        print(json.dumps(resposta.json(), indent=3))
+        #print(json.dumps(resposta.json(), indent=3))
+        print(resposta.text)
     else:
         print(resposta.text)
     #menu()
