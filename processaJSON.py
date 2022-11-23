@@ -37,21 +37,25 @@ def arquivoJSON(ArquivoDados, IdOS, IdOSEletronico):
         acesso.InsereMensagemTemplate(DadosProcessamentoReplace, GuidOs)
 
 
-idcomercial = 855
-idnterno = 20586
-variaveisTemplate = acesso.GetMensagemTemplate(idcomercial,idnterno)
-listaVariaveisTemplate=[]
-for key,value in enumerate(variaveisTemplate):
-    if (value == '-'):
-        inicio = key+2
-    if (value == ','):
-        fim = key
-        listaVariaveisTemplate.append(variaveisTemplate[inicio:fim])
-    if (key+1 == len(variaveisTemplate)):
-        fim = key+1
-        listaVariaveisTemplate.append(variaveisTemplate[inicio:fim]) 
 
-print (listaVariaveisTemplate)
+
+def GetvariavelTemplate():
+    idcomercial = 855
+    idnterno = 20586
+    variaveisTemplate = acesso.GetMensagemTemplate(idcomercial,idnterno)
+    listaVariaveisTemplate=[]
+    for key,value in enumerate(variaveisTemplate):
+        if (value == '-'):
+            inicio = key+2
+        if (value == ','):
+            
+            fim = key
+            listaVariaveisTemplate.append(variaveisTemplate[inicio:fim])
+        if (key+1 == len(variaveisTemplate)):
+            fim = key+1
+            listaVariaveisTemplate.append(variaveisTemplate[inicio:fim]) 
+
+    return listaVariaveisTemplate
 
 
 
