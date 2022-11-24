@@ -1,14 +1,12 @@
 import csv
 import cliente
-import acesso
 import json
-import os
-import sys
+import acesso
 
 ArquivoDados = {}
 DadosProcessamentoWhatsAppDTO = {}
-IdOS = 1081878
-IdOSEletronico = 1029660
+separador = ';'
+teste = []
 
 def make_json(csvFilePath):
     with open(csvFilePath, encoding='ANSI') as csvf:
@@ -21,41 +19,50 @@ def make_json(csvFilePath):
 def arquivoJSON(ArquivoDados, IdOS, IdOSEletronico):
     dadosOs = cliente.OsWhatsAppProcessamentoDTO(acesso.IniciaOsWhatsApp(IdOS, IdOSEletronico).replace('"',""))
     GuidOs = dadosOs.GuidOsWhatsAppEnvio
-    for i in range(len(ArquivoDados)):        
+    jesus = GetvariavelTemplate()
+
+    for i in range(len(ArquivoDados)): 
+        for x in range(len(jesus)):
+            teste.append(ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}'][jesus[x]])
+
+        MensagemTemplate = [separador.join(teste)]      
+        #print(result)      
+
         dados = cliente.DadosProcessamento(
-            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['NomeConsorciado'],
+            MensagemTemplate,#[json.dumps(jesus)],
             ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['CodBarra2Via'], 
-            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['Vencimento'], 
+            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['vencimento'], 
             ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['Tradutor'], 
             ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['CodigoPix'], 
             ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['ContatoDestino'], 
     )
+
         DadosProcessamentoWhatsAppDTO["\"OsWhatsAppEnvio\""] = json.dumps(dadosOs.__dict__)
         DadosProcessamentoWhatsAppDTO["\"DadosProcessamento\""] = json.dumps(dados.__dict__)
         
-        DadosProcessamentoReplace = str(DadosProcessamentoWhatsAppDTO).replace("'","")
+        DadosProcessamentoReplace = str(DadosProcessamentoWhatsAppDTO).replace("'","").replace("[", "").replace("]", "")
         acesso.InsereMensagemTemplate(DadosProcessamentoReplace, GuidOs)
 
-
+        teste.clear()
 
 
 def GetvariavelTemplate():
-    idcomercial = 855
-    idnterno = 20586
-    variaveisTemplate = acesso.GetMensagemTemplate(idcomercial,idnterno)
-    listaVariaveisTemplate=[]
-    for key,value in enumerate(variaveisTemplate):
-        if (value == '-'):
-            inicio = key+2
-        if (value == ','):
-            
-            fim = key
-            listaVariaveisTemplate.append(variaveisTemplate[inicio:fim])
-        if (key+1 == len(variaveisTemplate)):
-            fim = key+1
-            listaVariaveisTemplate.append(variaveisTemplate[inicio:fim]) 
 
-    return listaVariaveisTemplate
+idcomercial = 855
+idnterno = 20586
+variaveisTemplate = acesso.GetMensagemTemplate(idcomercial,idnterno)
+listaVariaveisTemplate=[]
+for key,value in enumerate(variaveisTemplate):
+    if (value == '-'):
+        inicio = key+2
+    if (value == ','):
+        fim = key
+        listaVariaveisTemplate.append(variaveisTemplate[inicio:fim])
+    if (key+1 == len(variaveisTemplate)):
+        fim = key+1
+        listaVariaveisTemplate.append(variaveisTemplate[inicio:fim]) 
+
+print (listaVariaveisTemplate)
 
 
 
@@ -69,5 +76,10 @@ arquivoJSON(ArquivoDados, IdOS, IdOSEletronico)
 
 
 
+            fim = key+1
 
+            listaVariaveisTemplate.append(variaveisTemplate[inicio:fim])
 
+    return (listaVariaveisTemplate)
+
+#GetvariavelTemplate()    
