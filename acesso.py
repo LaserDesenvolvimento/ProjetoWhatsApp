@@ -1,6 +1,5 @@
 import requests
 import json
-import json
 import sys
 import os
 import senha
@@ -29,39 +28,33 @@ def GetMensagemTemplate(idComercial, idInterno): #GET
     params = {'idComercial':idComercial, 'idInterno':idInterno}
     resposta = requests.get(url, headers=headers, params=params)
     if(resposta.status_code == 200):
-        #idcomercial = 855
-        #idnterno = 20586
         templates = resposta.json()
-        for x in templates:
-            print (x + ':  ' + str(templates[x]))
-        #print(templates['IdInterno'])
-        #print(templates['Observacao'])
+        #for x in templates:
+            #print (x + ':  ' + str(templates[x]))
         return templates['Observacao']
     else:
         print(resposta.text)
-    #menu()
+    menu()
 
 def GetMensagensTemplatesByIdComercial(idComercial): #GET
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/GetMensagensTemplatesByIdComercial'
     params = {'idComercial':idComercial}
     resposta = requests.get(url, headers=headers, params=params)
     if(resposta.status_code == 200):
-        #print(json.dumps(resposta.json(), indent=3))
         return resposta.json()
     else:
         print(resposta.text)
-    #menu()
+    menu()    
 
 def EstornaOSWhatsApp(idos): #DELETE
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/EstornaOSWhatsApp'
     params = {'idos':idos}
     resposta = requests.delete(url, headers=headers,params=params)
     if(resposta.status_code == 200):
-        #print(json.dumps(resposta.json(), indent=3))
         print(resposta.text)
     else:
         print(resposta.text)
-    #menu()
+    menu()    
 
 def IniciaOsWhatsApp(idos, idOsEletronico): #POST                                                                                         
         url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/IniciaOsWhatsApp'
@@ -97,29 +90,22 @@ def GetOSProcessamentoPendente(): #GET
         print(json.dumps(resposta.json(), indent=3))
     else:
         print(resposta.text)
-    #menu()
+    menu()    
 
-#a=1081878
-#b=1029660
-#jsonStr = json.dumps(dados.__dict__)
-#print(DadosProcessamentoWhatsAppDTO)
-#EstornaOSWhatsApp(a)
-#IniciaOsWhatsApp(a, b)
-#InsereMensagemTemplate(DadosProcessamentoWhatsAppDTO)
-#GetOSProcessamentoPendente()
 def menu():
     opc = int(input('''
 
-1 - GetMensagemTemplate
-2 - GetMensagensTemplatesByIdComercial
-3 - Processamento Pendente
-4 - Estorna OSWhatsApp
-5 - Sair
-opcao:  '''))
+    1 - GetMensagemTemplate
+    2 - GetMensagensTemplatesByIdComercial
+    3 - Processamento Pendente
+    4 - Estorna OSWhatsApp
+    5 - Sair
+    opcao:  '''))
+    
     if opc == 1:
         idComercial = int(input('idComercial-> '))
         idInterno = int(input('idInterno-> '))
-        GetMensagemTemplate(idComercial,idInterno)
+        GetMensagemTemplate(idComercial,idInterno)        
     elif opc == 2:
         idComercial = int(input('idComercial-> '))
         GetMensagensTemplatesByIdComercial(idComercial)
@@ -131,6 +117,4 @@ opcao:  '''))
     elif opc == 5:
         sys.exit()
     else:
-        print("opção invalida, tente novamente.\n")
-        
-#menu()
+        print("opção invalida, tente novamente.\n")            

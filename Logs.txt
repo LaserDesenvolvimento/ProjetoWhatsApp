@@ -1,1 +1,1 @@
-Já foram inseridos dados variáveis para: CONDOMINIO EDIFICIO TORIBA - cdControle: 01029660000041 GuidOsWhats:4e62ea1f-af9f-493b-ed5a-08dacd48959c
+A MensagemTemplate possui 2 variáveis e o campo "DadosMensagemTemplate" possui 8. A quantidade de variáveis deve ser sempre a mesma! CdControle: 01029660000004 GuidOsWhats:79aa5869-bece-4728-41f2-08dace3b35f1
