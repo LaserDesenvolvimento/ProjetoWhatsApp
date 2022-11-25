@@ -90,7 +90,20 @@ def GetOSProcessamentoPendente(): #GET
         print(json.dumps(resposta.json(), indent=3))
     else:
         print(resposta.text)
-    menu()    
+    menu()  
+
+def InformaTerminoProcessamento(GuidOs): #patch
+    url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/InformaTerminoProcessamento'
+    params = {'guidOsWhatsAppEnvio':GuidOs}
+    
+    resposta = requests.patch(url, headers=headers, params=params)
+
+    if(resposta.status_code == 200):
+        print(resposta.text)
+    else:
+        print(resposta.text)
+        sys.exit(1)
+
 
 def menu():
     opc = int(input('''

@@ -6,7 +6,7 @@ import acesso
 ArquivoDados = {}
 DadosProcessamentoWhatsAppDTO = {}
 separador = ';'
-teste = []
+VariaveisTemplates = []
 
 def make_json(csvFilePath):
     with open(csvFilePath, encoding='ANSI') as csvf:
@@ -19,22 +19,22 @@ def make_json(csvFilePath):
 def arquivoJSON(ArquivoDados, IdOS, IdOSEletronico):
     dadosOs = cliente.OsWhatsAppProcessamentoDTO(acesso.IniciaOsWhatsApp(IdOS, IdOSEletronico).replace('"',""))
     GuidOs = dadosOs.GuidOsWhatsAppEnvio
-    jesus = GetvariavelTemplate()
+    BuscaTemplate = GetvariavelTemplate()
 
     for i in range(len(ArquivoDados)): 
-        for x in range(len(jesus)):
-            teste.append(ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}'][jesus[x]])
+        for x in range(len(BuscaTemplate)):
+            VariaveisTemplates.append(ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}'][BuscaTemplate[x]])
 
-        MensagemTemplate = [separador.join(teste)]      
-        #print(result)      
+        MensagemTemplate = [separador.join(VariaveisTemplates)]      
 
         dados = cliente.DadosProcessamento(
-            MensagemTemplate,#[json.dumps(jesus)],
+            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['nome'],
+            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['ContatoDestino'],
+            MensagemTemplate,
             ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['CodBarra2Via'], 
-            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['vencimento'], 
-            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['Tradutor'], 
-            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['CodigoPix'], 
-            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['ContatoDestino'], 
+            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['Tradutor'],
+            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['CodigoPix'],
+            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['vencimento']             
     )
 
         DadosProcessamentoWhatsAppDTO["\"OsWhatsAppEnvio\""] = json.dumps(dadosOs.__dict__)
@@ -43,7 +43,9 @@ def arquivoJSON(ArquivoDados, IdOS, IdOSEletronico):
         DadosProcessamentoReplace = str(DadosProcessamentoWhatsAppDTO).replace("'","").replace("[", "").replace("]", "")
         acesso.InsereMensagemTemplate(DadosProcessamentoReplace, GuidOs)
 
-        teste.clear()
+        VariaveisTemplates.clear()
+
+    acesso.InformaTerminoProcessamento(GuidOs)    
 
 
 def GetvariavelTemplate():
@@ -63,23 +65,4 @@ def GetvariavelTemplate():
             listaVariaveisTemplate.append(variaveisTemplate[inicio:fim]) 
 
     print (listaVariaveisTemplate)
-
-
-
-csvFilePath = r'arquivos/CSV_AET001_AET002.csv'
-make_json(csvFilePath)
-arquivoJSON(ArquivoDados, IdOS, IdOSEletronico)
-
-#acesso.menu()
- 
-
-#teste
-
-
-            #fim = key+1
-
-            #listaVariaveisTemplate.append(variaveisTemplate[inicio:fim])
-
-    #return (listaVariaveisTemplate)
-
-#GetvariavelTemplate()    
+    return listaVariaveisTemplate

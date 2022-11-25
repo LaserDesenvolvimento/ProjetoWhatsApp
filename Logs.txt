@@ -1,1 +1,1 @@
-A MensagemTemplate possui 2 variáveis e o campo "DadosMensagemTemplate" possui 8. A quantidade de variáveis deve ser sempre a mesma! CdControle: 01029660000004 GuidOsWhats:79aa5869-bece-4728-41f2-08dace3b35f1
+Contato deve iniciar com "+". Número informado: 5516991833065 GuidOsWhats:8d0b8d0e-f608-429a-68aa-08dacf12fd47

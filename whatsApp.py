@@ -1,11 +1,11 @@
 import sys
 import acesso
-import processaJSON
+import processamento
 
 
 try:
     arquivo = r'CSV_AET001_AET002.csv'
-    IdOS = 1086188
+    IdOS = 1086189
     IdOSEletronico = 1029660
 
 except:
@@ -14,5 +14,5 @@ except:
 
 csvFilePath = arquivo
 
-processaJSON.make_json(arquivo)
-processaJSON.arquivoJSON(processaJSON.ArquivoDados, IdOS, IdOSEletronico)
+processamento.make_json(arquivo)
+processamento.arquivoJSON(processamento.ArquivoDados, IdOS, IdOSEletronico)
