@@ -2,6 +2,7 @@ import csv
 import cliente
 import json
 import acesso
+import os
 
 ArquivoDados = {}
 DadosProcessamentoWhatsAppDTO = {}
@@ -16,10 +17,10 @@ def make_json(csvFilePath):
                 key = rows['CodBarra2Via']
                 ArquivoDados[key] = rows
 
-def arquivoJSON(ArquivoDados, IdOS, IdOSEletronico):
+def arquivoJSON(IdOS, IdOSEletronico, idcomercial, idnterno, agendaEnvio, qtdeMinutos):
     dadosOs = cliente.OsWhatsAppProcessamentoDTO(acesso.IniciaOsWhatsApp(IdOS, IdOSEletronico).replace('"',""))
     GuidOs = dadosOs.GuidOsWhatsAppEnvio
-    BuscaTemplate = GetvariavelTemplate()
+    BuscaTemplate = GetvariavelTemplate(idcomercial, idnterno)
 
     for i in range(len(ArquivoDados)): 
         for x in range(len(BuscaTemplate)):
@@ -45,13 +46,16 @@ def arquivoJSON(ArquivoDados, IdOS, IdOSEletronico):
 
         VariaveisTemplates.clear()
 
-    acesso.InformaTerminoProcessamento(GuidOs)    
+    os.system("cls")
+    acesso.InformaTerminoProcessamento(GuidOs)
+    if agendaEnvio == "S":
+        acesso.AgendaEnvioOsWhatsApp(IdOS, qtdeMinutos)
 
 
-def GetvariavelTemplate():
+def GetvariavelTemplate(idcomercial, idnterno):
 
-    idcomercial = 855
-    idnterno = 20586
+    #idcomercial = 855
+    #idnterno = 20586
     variaveisTemplate = acesso.GetMensagemTemplate(idcomercial,idnterno)
     listaVariaveisTemplate=[]
     for key,value in enumerate(variaveisTemplate):
@@ -64,5 +68,4 @@ def GetvariavelTemplate():
             fim = key+1
             listaVariaveisTemplate.append(variaveisTemplate[inicio:fim]) 
 
-    print (listaVariaveisTemplate)
     return listaVariaveisTemplate
