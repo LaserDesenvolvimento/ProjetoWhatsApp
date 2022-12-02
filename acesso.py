@@ -2,7 +2,9 @@ import requests
 import json
 import sys
 import os
+import menu
 import senha
+
 
 username = os.environ['username'] 
 password = os.environ['password']
@@ -44,7 +46,7 @@ def GetMensagemTemplateMenu(idComercial, idInterno): #GET MENU
     else:
         print(resposta.text)
         sys.exit(1)
-    menu()    
+    menu.menu_inicial() 
 
 def GetMensagensTemplatesByIdComercial(idComercial): #GET
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/GetMensagensTemplatesByIdComercial'
@@ -68,20 +70,21 @@ def GetMensagensTemplatesByIdComercialMenu(idComercial): #GET Menu
     else:
         print(resposta.text)
         sys.exit(1)
-    menu()    
+    menu.menu_inicial()   
 
 def EstornaOSWhatsApp(idos): #DELETE
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/EstornaOSWhatsApp'
     params = {'idos':idos}
     resposta = requests.delete(url, headers=headers,params=params)
     if(resposta.status_code == 200):
+        os.system("cls")
         print(resposta.text)
         os.system("pause")
         os.system("cls")
     else:
         print(resposta.text)
         sys.exit()
-    menu()
+    menu.menu_inicial()
 
 def IniciaOsWhatsApp(idos, idOsEletronico): #POST                                                                                         
         url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/IniciaOsWhatsApp'
@@ -115,13 +118,20 @@ def GetOSProcessamentoPendente(): #GET
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/GetOSProcessamentoPendente'
     resposta = requests.get(url, headers=headers)
     if(resposta.status_code == 200):
-        os.system("cls")
-        print(json.dumps(resposta.json(), indent=3))
-        os.system("pause")
-        os.system("cls")
+        if (json.dumps(resposta.json(), indent=3)) == '[]':
+            os.system("cls")
+            print("Não possui nenhuma OS pendente!")
+            os.system("pause")
+            os.system("cls")
+        else:    
+            os.system("cls")
+            print(json.dumps(resposta.json(), indent=3))
+            os.system("pause")
+            os.system("cls")
+
     else:
         print(resposta.text)
-    menu()
+    menu.menu_inicial()
 
 def InformaTerminoProcessamento(GuidOs): #Patch
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/InformaTerminoProcessamento'
@@ -172,7 +182,7 @@ def AgendaEnvioOsWhatsAppMenu(idos, qtdeMinutos): #Patch Menu
     else:
         print(resposta.text)
         sys.exit(1)
-    menu()        
+    menu.menu_inicial()        
 
 def RemoveAgendamentoEnvioOsWhatsApp(idos):
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/RemoveAgendamentoEnvioOsWhatsApp'
@@ -188,40 +198,4 @@ def RemoveAgendamentoEnvioOsWhatsApp(idos):
     else:
         print(resposta.text)
         sys.exit(1)
-    menu()        
-
-def menu():
-    opc = int(input('''
-
-    1 - GetMensagemTemplate
-    2 - GetMensagensTemplatesByIdComercial
-    3 - Processamento Pendente
-    4 - Estorna OSWhatsApp
-    5 - Agendamento de Envio
-    6 - Remove agendamento
-    7 - Sair
-    opcao:  '''))
-    
-    if opc == 1:
-        idComercial = int(input('idComercial-> '))
-        idInterno = int(input('idInterno-> '))
-        GetMensagemTemplateMenu(idComercial,idInterno)        
-    elif opc == 2:
-        idComercial = int(input('idComercial-> '))
-        GetMensagensTemplatesByIdComercialMenu(idComercial)
-    elif opc == 3:
-        GetOSProcessamentoPendente()
-    elif opc == 4:
-        estornaOS = int(input('idos-> '))
-        EstornaOSWhatsApp(estornaOS)
-    elif opc == 5:
-        idos = int(input('idos-> '))
-        qtdeMinutos = int(input('Quantidade de minutos-> '))
-        AgendaEnvioOsWhatsAppMenu(idos, qtdeMinutos)
-    elif opc == 6:
-        estornaOS = int(input('idos-> '))
-        RemoveAgendamentoEnvioOsWhatsApp(estornaOS)    
-    elif opc == 7:
-        sys.exit()
-    else:
-        print("opção invalida, tente novamente.\n")            
+    menu.menu_inicial()

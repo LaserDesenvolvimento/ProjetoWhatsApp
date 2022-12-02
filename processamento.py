@@ -2,6 +2,7 @@ import csv
 import cliente
 import json
 import acesso
+from io import StringIO
 import os
 
 ArquivoDados = {}
@@ -11,10 +12,14 @@ VariaveisTemplates = []
 
 def make_json(csvFilePath):
     with open(csvFilePath, encoding='ANSI') as csvf:
+
         csvReader = csv.DictReader(csvf, delimiter='|')
+
+        for k, value in enumerate(csvReader.fieldnames):
+            csvReader.fieldnames[k] = value.lower()
        
         for rows in csvReader:
-                key = rows['CodBarra2Via']
+                key = rows['codbarra2via']
                 ArquivoDados[key] = rows
 
 def arquivoJSON(IdOS, IdOSEletronico, idcomercial, idnterno, agendaEnvio, qtdeMinutos):
@@ -30,11 +35,11 @@ def arquivoJSON(IdOS, IdOSEletronico, idcomercial, idnterno, agendaEnvio, qtdeMi
 
         dados = cliente.DadosProcessamento(
             ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['nome'],
-            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['ContatoDestino'],
+            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['contatodestino'],
             MensagemTemplate,
-            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['CodBarra2Via'], 
-            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['Tradutor'],
-            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['CodigoPix'],
+            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['codbarra2via'], 
+            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['tradutor'],
+            ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['codigopix'],
             ArquivoDados[str(IdOSEletronico).zfill(8) + f'{(i + 1):06}']['vencimento']             
     )
 
@@ -48,14 +53,10 @@ def arquivoJSON(IdOS, IdOSEletronico, idcomercial, idnterno, agendaEnvio, qtdeMi
 
     os.system("cls")
     acesso.InformaTerminoProcessamento(GuidOs)
-    if agendaEnvio == "S":
-        acesso.AgendaEnvioOsWhatsApp(IdOS, qtdeMinutos)
-
+    if agendaEnvio == "S": acesso.AgendaEnvioOsWhatsApp(IdOS, qtdeMinutos)
 
 def GetvariavelTemplate(idcomercial, idnterno):
 
-    #idcomercial = 855
-    #idnterno = 20586
     variaveisTemplate = acesso.GetMensagemTemplate(idcomercial,idnterno)
     listaVariaveisTemplate=[]
     for key,value in enumerate(variaveisTemplate):
