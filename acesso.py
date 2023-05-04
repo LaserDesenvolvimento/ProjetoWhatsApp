@@ -23,6 +23,7 @@ token ='Bearer ' + r['access_token']
 headers = {'Authorization': token}
 
 
+
 def GetMensagemTemplate(idComercial, idInterno): #GET
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/GetMensagemTemplate'
     params = {'idComercial':idComercial, 'idInterno':idInterno}
@@ -39,14 +40,10 @@ def GetMensagemTemplateMenu(idComercial, idInterno): #GET MENU
     params = {'idComercial':idComercial, 'idInterno':idInterno}
     resposta = requests.get(url, headers=headers, params=params)
     if(resposta.status_code == 200):
-        os.system("cls")
-        print(json.dumps(resposta.json(), indent=3))
-        os.system("pause")
-        os.system("cls")
+        return(json.dumps(resposta.json(), indent=3))
+
     else:
-        print(resposta.text)
-        sys.exit(1)
-    menu.menu_inicial() 
+        return(str(resposta.status_code))
 
 def GetMensagensTemplatesByIdComercial(idComercial): #GET
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/GetMensagensTemplatesByIdComercial'
@@ -63,28 +60,18 @@ def GetMensagensTemplatesByIdComercialMenu(idComercial): #GET Menu
     params = {'idComercial':idComercial}
     resposta = requests.get(url, headers=headers, params=params)
     if(resposta.status_code == 200):
-        os.system("cls")
-        print(json.dumps(resposta.json(), indent=3))
-        os.system("pause")
-        os.system("cls")
+        return(json.dumps(resposta.json(), indent=3))
     else:
-        print(resposta.text)
-        sys.exit(1)
-    menu.menu_inicial()   
+        return(resposta.text)
 
 def EstornaOSWhatsApp(idos): #DELETE
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/EstornaOSWhatsApp'
     params = {'idos':idos}
     resposta = requests.delete(url, headers=headers,params=params)
     if(resposta.status_code == 200):
-        os.system("cls")
-        print(resposta.text)
-        os.system("pause")
-        os.system("cls")
+        return(str(resposta.status_code))
     else:
-        print(resposta.text)
-        sys.exit()
-    menu.menu_inicial()
+        return(resposta.text)
 
 def IniciaOsWhatsApp(idos, idOsEletronico): #POST                                                                                         
         url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/IniciaOsWhatsApp'
@@ -109,8 +96,8 @@ def InsereMensagemTemplate(processaMsg, GuidOs): #POST
         print("Cliente: " + resultMsg['Nome'], " Telefone: ", resultMsg['ContatoDestino'], " Status: ", resposta.status_code)
         return resposta.text
     else:
-        with open(".\\Logs.txt", "w", encoding="ANSI") as new_arq:
-            new_arq.writelines(resposta.text + " GuidOsWhats:" + GuidOs)
+        with open(".\\Logs.txt", "a", encoding="ANSI") as new_arq:
+            new_arq.write(resposta.text + " GuidOsWhats: " + GuidOs + '\n')
             print("Cliente: " + resultMsg['Nome'], " Telefone: ", resultMsg['ContatoDestino'], " Status: ", resposta.status_code)
             return resposta.text
 
@@ -119,19 +106,19 @@ def GetOSProcessamentoPendente(): #GET
     resposta = requests.get(url, headers=headers)
     if(resposta.status_code == 200):
         if (json.dumps(resposta.json(), indent=3)) == '[]':
-            os.system("cls")
-            print("Não possui nenhuma OS pendente!")
-            os.system("pause")
-            os.system("cls")
+            #os.system("cls")
+            return("Não possui nenhuma OS pendente!")
+            #os.system("pause")
+            #os.system("cls")
         else:    
-            os.system("cls")
-            print(json.dumps(resposta.json(), indent=3))
-            os.system("pause")
-            os.system("cls")
+            #os.system("cls")
+            return(json.dumps(resposta.json(), indent=3))
+            #os.system("pause")
+            #os.system("cls")
 
     else:
-        print(resposta.text)
-    menu.menu_inicial()
+        return(resposta.text)
+    #menu.menu_inicial()
 
 def InformaTerminoProcessamento(GuidOs): #Patch
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/InformaTerminoProcessamento'
@@ -175,14 +162,9 @@ def AgendaEnvioOsWhatsAppMenu(idos, qtdeMinutos): #Patch Menu
     resposta = requests.patch(url, headers=headers, params=params)
 
     if(resposta.status_code == 200):
-        os.system("cls")
-        print(resposta.text)
-        os.system("pause")
-        os.system("cls")
+        return(str(resposta.status_code))
     else:
-        print(resposta.text)
-        sys.exit(1)
-    menu.menu_inicial()        
+        return(resposta.text)      
 
 def RemoveAgendamentoEnvioOsWhatsApp(idos):
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/RemoveAgendamentoEnvioOsWhatsApp'
@@ -191,11 +173,6 @@ def RemoveAgendamentoEnvioOsWhatsApp(idos):
     resposta = requests.patch(url, headers=headers, params=params)
 
     if(resposta.status_code == 200):
-        os.system("cls")
-        print(resposta.text)
-        os.system("pause")
-        os.system("cls")
+        return(resposta.text)
     else:
-        print(resposta.text)
-        sys.exit(1)
-    menu.menu_inicial()
+        return(resposta.text)

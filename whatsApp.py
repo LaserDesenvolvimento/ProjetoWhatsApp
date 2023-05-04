@@ -3,35 +3,25 @@ import acesso
 import processamento
 import menu
 
+def main():
+    try:
+        #arquivo = r'CSV_AET001_AET002.csv'
+        #IdOSWhats = 1116260
+        #IdOSEletronico = 1115285
+        #agendaEnvio = "N"
+        #qtdeMinutos = "N"
 
-try:
-    # arquivo = sys.argv[1] #CSV_AET001_AET002.csv
-    # IdOS = sys.argv[2]
-    # IdOSEletronico = sys.argv[3]
-    # idcomercial = sys.argv[4]
-    # idnterno = sys.argv[5]
-    # agendaEnvio = sys.argv[6]
-    # qtdeMinutos = sys.argv[7]
+        arquivo = sys.argv[1]
+        IdOSWhats = sys.argv[2]
+        IdOSEletronico = sys.argv[3]
+        agendaEnvio = sys.argv[6]
+        qtdeMinutos = sys.argv[7]
 
-    arquivo = r'CSV_AET001_AET002.csv'
-    IdOS = 1086189
-    IdOSEletronico = 1029660
-    idcomercial = 855
-    idnterno = 20586
-    agendaEnvio = "N"
-    qtdeMinutos = "N"
-
-    if IdOSEletronico == "N":
-        IdOSEletronico = ""
-
-    if qtdeMinutos == "N":
-        qtdeMinutos = ""
-
-    processamento.make_json(arquivo)
-    processamento.arquivoJSON(IdOS, IdOSEletronico, idcomercial, idnterno, agendaEnvio, qtdeMinutos)
+        processamento.make_json(arquivo)
+        processamento.arquivoJSON(IdOSWhats, IdOSEletronico, agendaEnvio, qtdeMinutos)
     
-except:
-    if 'arquivo' in locals() or 'IdOS' in locals() or 'IdOSEletronico' in locals():
-        sys.exit()
-    else:
+    except IndexError:
         menu.menu_inicial()
+
+if __name__ == '__main__':
+    main()
