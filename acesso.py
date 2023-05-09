@@ -89,7 +89,7 @@ def IniciaOsWhatsApp(idos, idOsEletronico): #POST
             with open(".\\Logs.txt", "a", encoding="ANSI") as new_arq:
                 new_arq.write(resposta.text)
                 print("Status: " + str(resposta.status_code) + " " + resposta.text)
-                sys.exit()
+                sys.exit(1)
     
 def InsereMensagemTemplate(processaMsg, GuidOs): #POST                                                                                    
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/InsereMensagemTemplate'

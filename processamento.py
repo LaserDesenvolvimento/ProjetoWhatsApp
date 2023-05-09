@@ -108,6 +108,6 @@ def ChecaProcessamento(IdOSWhats, GuidOs):
     if os.path.isfile("Logs.txt"):
         acesso.EstornaOSWhatsApp(IdOSWhats)
         print("Verificar arquivo Logs.txt!!")
-        sys.exit()
+        sys.exit(1)
     else:
         acesso.InformaTerminoProcessamento(GuidOs)
