@@ -252,7 +252,7 @@ class MainWindow(QWidget):
         teste2 = acesso.EstornaOSWhatsApp(idOS)
 
         if (teste2 == "200"):
-            QMessageBox.critical(self, "Concluido" , "OS" + idOS + "estornada com sucesso!")
+            QMessageBox.critical(self, "Concluido" , "OS " + idOS + " estornada com sucesso!")
         else:
             QMessageBox.critical(self, "Mensagem de erro", teste2)
 

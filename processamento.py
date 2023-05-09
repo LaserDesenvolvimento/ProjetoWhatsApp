@@ -1,3 +1,4 @@
+import sys
 import csv
 import cliente
 import json
@@ -29,33 +30,34 @@ def make_json(csvFilePath):
         print(f"Erro na leitura do arquivo CSV: {e}")
         exit(1)
                 
-def arquivoJSON(IdOSWhats, IdOSEletronico, agendaEnvio, qtdeMinutos):
+def arquivoJSON(IdOSWhats, agendaEnvio, qtdeMinutos):
     try:
+        CodBarra2Via = list(ArquivoDados.keys())[0]
+        IdOS2Via = CodBarra2Via[:8]
+        IdOSEletronico = ArquivoDados[str(IdOS2Via).zfill(8) + f'{(1):06}']['idoseletronico']
+
         dadosOs = cliente.OsWhatsAppProcessamentoDTO(acesso.IniciaOsWhatsApp(IdOSWhats, IdOSEletronico).replace('"',""))
         GuidOs = dadosOs.GuidOsWhatsAppEnvio
 
-        CodBarra2Via = list(ArquivoDados.keys())[0]
-        IdOS = CodBarra2Via[:8]
-
-        idcomercial = ArquivoDados[str(IdOS).zfill(8) + f'{(1):06}']['idcomercial']
-        idnterno = ArquivoDados[str(IdOS).zfill(8) + f'{(1):06}']['idinterno']
+        idcomercial = ArquivoDados[str(IdOS2Via).zfill(8) + f'{(1):06}']['idcomercial']
+        idnterno = ArquivoDados[str(IdOS2Via).zfill(8) + f'{(1):06}']['idinterno']
         BuscaTemplate = GetvariavelTemplate(idcomercial, idnterno)
 
         for i in range(len(ArquivoDados)):
             VariaveisTemplates = []
             for x in range(len(BuscaTemplate)):
-                VariaveisTemplates.append(ArquivoDados[str(IdOS).zfill(8) + f'{(i + 1):06}'][BuscaTemplate[x]])
+                VariaveisTemplates.append(ArquivoDados[str(IdOS2Via).zfill(8) + f'{(i + 1):06}'][BuscaTemplate[x]])
 
             MensagemTemplate = [separador.join(VariaveisTemplates)]
 
             dados = cliente.DadosProcessamento(
-                ArquivoDados[str(IdOS).zfill(8) + f'{(i + 1):06}']['nome'],
-                ArquivoDados[str(IdOS).zfill(8) + f'{(i + 1):06}']['contatodestino'],
+                ArquivoDados[str(IdOS2Via).zfill(8) + f'{(i + 1):06}']['nome'],
+                ArquivoDados[str(IdOS2Via).zfill(8) + f'{(i + 1):06}']['contatodestino'],
                 MensagemTemplate,
-                ArquivoDados[str(IdOS).zfill(8) + f'{(i + 1):06}']['codbarra2via'],
-                ArquivoDados[str(IdOS).zfill(8) + f'{(i + 1):06}']['tradutor'],
-                ArquivoDados[str(IdOS).zfill(8) + f'{(i + 1):06}']['codigopix'],
-                ArquivoDados[str(IdOS).zfill(8) + f'{(i + 1):06}']['vencimento']
+                ArquivoDados[str(IdOS2Via).zfill(8) + f'{(i + 1):06}']['codbarra2via'],
+                ArquivoDados[str(IdOS2Via).zfill(8) + f'{(i + 1):06}']['tradutor'],
+                ArquivoDados[str(IdOS2Via).zfill(8) + f'{(i + 1):06}']['codigopix'],
+                ArquivoDados[str(IdOS2Via).zfill(8) + f'{(i + 1):06}']['vencimento']
             )
 
             DadosProcessamentoWhatsAppDTO["\"OsWhatsAppEnvio\""] = json.dumps(dadosOs.__dict__)
@@ -66,11 +68,11 @@ def arquivoJSON(IdOSWhats, IdOSEletronico, agendaEnvio, qtdeMinutos):
 
         os.system("cls")
 
-        acesso.InformaTerminoProcessamento(GuidOs)
+        ChecaProcessamento(IdOSWhats, GuidOs)
 
         #Verificar agendamento
         if agendaEnvio == "S":
-            acesso.AgendaEnvioOsWhatsApp(IdOS, qtdeMinutos)
+            acesso.AgendaEnvioOsWhatsApp(IdOSWhats, qtdeMinutos)
     except Exception as e:
         print(f"An error occurred: {str(e)}")
 
@@ -102,3 +104,10 @@ def GetvariavelTemplate(idcomercial, idnterno):
 
     return listaVariaveisTemplate
 
+def ChecaProcessamento(IdOSWhats, GuidOs):
+    if os.path.isfile("Logs.txt"):
+        acesso.EstornaOSWhatsApp(IdOSWhats)
+        print("Verificar arquivo Logs.txt!!")
+        sys.exit()
+    else:
+        acesso.InformaTerminoProcessamento(GuidOs)

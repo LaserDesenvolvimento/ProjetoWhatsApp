@@ -74,15 +74,22 @@ def EstornaOSWhatsApp(idos): #DELETE
         return(resposta.text)
 
 def IniciaOsWhatsApp(idos, idOsEletronico): #POST                                                                                         
-        url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/IniciaOsWhatsApp'
-        params = {'idos':idos,'idOsEletronico':idOsEletronico}
-        resposta = requests.post(url, headers=headers, params=params)
+        if (idOsEletronico == ""):
+            url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/IniciaOsWhatsApp'
+            params = {'idos':idos}
+            resposta = requests.post(url, headers=headers, params=params)           
+        else:
+            url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/IniciaOsWhatsApp'
+            params = {'idos':idos,'idOsEletronico':idOsEletronico}
+            resposta = requests.post(url, headers=headers, params=params)
         
         if(resposta.status_code == 200):
             return resposta.text
         else:
-            print(resposta.text)
-            sys.exit()
+            with open(".\\Logs.txt", "a", encoding="ANSI") as new_arq:
+                new_arq.write(resposta.text)
+                print("Status: " + str(resposta.status_code) + " " + resposta.text)
+                sys.exit()
     
 def InsereMensagemTemplate(processaMsg, GuidOs): #POST                                                                                    
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/InsereMensagemTemplate'
@@ -93,8 +100,10 @@ def InsereMensagemTemplate(processaMsg, GuidOs): #POST
     resultMsg = MsgTemplate['DadosProcessamento']   
       
     if(resposta.status_code == 200):
-        print("Cliente: " + resultMsg['Nome'], " Telefone: ", resultMsg['ContatoDestino'], " Status: ", resposta.status_code)
-        return resposta.text
+        with open(".\\ProcessamentoLogs.txt", "a", encoding="ANSI") as new_arq:
+            new_arq.write("Cliente: " + resultMsg['Nome'] + " Telefone: " + resultMsg['ContatoDestino'] + " " + resposta.text + '\n')
+            print("Cliente: " + resultMsg['Nome'], " Telefone: ", resultMsg['ContatoDestino'], " Status: ", resposta.status_code)
+            return resposta.text
     else:
         with open(".\\Logs.txt", "a", encoding="ANSI") as new_arq:
             new_arq.write(resposta.text + " GuidOsWhats: " + GuidOs + '\n')
