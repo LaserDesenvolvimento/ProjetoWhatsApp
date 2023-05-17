@@ -6,23 +6,22 @@ import acesso
 from io import StringIO
 import os
 
-ArquivoDados = {}
+arquivo_dados = {}
 DadosProcessamentoWhatsAppDTO = {}
 separador = ';'
-VariaveisTemplates = []
 
-def make_json(csvFilePath):
+def processa_arquivo(arquivo):
     try:
-        with open(csvFilePath, encoding='ANSI') as csvf:
+        with open(arquivo, encoding='ANSI') as csvf:
 
-            csvReader = csv.DictReader(csvf, delimiter='|')
+            arquivo_csv = csv.DictReader(csvf, delimiter='|')
 
-            for k, value in enumerate(csvReader.fieldnames):
-                csvReader.fieldnames[k] = value.lower()
+            for k, value in enumerate(arquivo_csv.fieldnames):
+                arquivo_csv.fieldnames[k] = value.lower()
 
-            for rows in csvReader:
-                key = rows['codbarra2via']
-                ArquivoDados[key] = rows
+            for linha in arquivo_csv:
+                chave = linha['codbarra2via']
+                arquivo_dados[chave] = linha
     except FileNotFoundError:
         print("O arquivo não foi encontrado!")
         exit(1)
@@ -30,71 +29,80 @@ def make_json(csvFilePath):
         print(f"Erro na leitura do arquivo CSV: {e}")
         exit(1)
                 
-def arquivoJSON(IdOSWhats, agendaEnvio, qtdeMinutos):
+def insere_dados_whatsapp(id_os_whats, agenda_envio, qtde_minutos):
     try:
-        CodBarra2Via = list(ArquivoDados.keys())[0]
-        IdOS2Via = CodBarra2Via[:8]
-        IdOSEletronico = ArquivoDados[str(IdOS2Via).zfill(8) + f'{(1):06}']['idoseletronico']
+        cod_barra_2via = list(arquivo_dados.keys())[0]
+        id_os_2via = cod_barra_2via[:8]
+        id_os_eletronico = arquivo_dados[str(id_os_2via).zfill(8) + f'{(1):06}']['idoseletronico']
 
-        dadosOs = cliente.OsWhatsAppProcessamentoDTO(acesso.IniciaOsWhatsApp(IdOSWhats, IdOSEletronico).replace('"',""))
-        GuidOs = dadosOs.GuidOsWhatsAppEnvio
+        dados_os = cliente.OsWhatsAppProcessamentoDTO(acesso.IniciaOsWhatsApp(id_os_whats, id_os_eletronico).replace('"',""))
+        guid_os = dados_os.GuidOsWhatsAppEnvio
 
-        idcomercial = ArquivoDados[str(IdOS2Via).zfill(8) + f'{(1):06}']['idcomercial']
-        idnterno = ArquivoDados[str(IdOS2Via).zfill(8) + f'{(1):06}']['idinterno']
-        BuscaTemplate = GetvariavelTemplate(idcomercial, idnterno)
+        id_comercial = arquivo_dados[str(id_os_2via).zfill(8) + f'{(1):06}']['idcomercial']
+        id_interno = arquivo_dados[str(id_os_2via).zfill(8) + f'{(1):06}']['idinterno']
+        busca_template = get_variavel_template(id_comercial, id_interno)
 
-        for i in range(len(ArquivoDados)):
-            VariaveisTemplates = []
-            for x in range(len(BuscaTemplate)):
-                VariaveisTemplates.append(ArquivoDados[str(IdOS2Via).zfill(8) + f'{(i + 1):06}'][BuscaTemplate[x]])
+        for i in range(len(arquivo_dados)):
+            variaveis_templates = []
+            for x in range(len(busca_template)):
+                variaveis_templates.append(arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}'][busca_template[x]])
 
-            MensagemTemplate = [separador.join(VariaveisTemplates)]
+            mensagem_template = [separador.join(variaveis_templates)]
 
             dados = cliente.DadosProcessamento(
-                ArquivoDados[str(IdOS2Via).zfill(8) + f'{(i + 1):06}']['nome'],
-                ArquivoDados[str(IdOS2Via).zfill(8) + f'{(i + 1):06}']['contatodestino'],
-                MensagemTemplate,
-                ArquivoDados[str(IdOS2Via).zfill(8) + f'{(i + 1):06}']['codbarra2via'],
-                ArquivoDados[str(IdOS2Via).zfill(8) + f'{(i + 1):06}']['tradutor'],
-                ArquivoDados[str(IdOS2Via).zfill(8) + f'{(i + 1):06}']['codigopix'],
-                ArquivoDados[str(IdOS2Via).zfill(8) + f'{(i + 1):06}']['vencimento']
+                arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}']['guid'],
+                arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}']['nome'],
+                arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}']['contatodestino'],
+                mensagem_template,
+                arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}']['nrodocumento'],
+                arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}']['codbarra2via'],
+                arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}']['tradutor'],
+                arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}']['codigopix'],
+                arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}']['vencimento']
             )
 
-            DadosProcessamentoWhatsAppDTO["\"OsWhatsAppEnvio\""] = json.dumps(dadosOs.__dict__)
+            #Não foi colocado em snake_case, pois precisa seguir o mesmo nome da API
+            DadosProcessamentoWhatsAppDTO["\"OsWhatsAppEnvio\""] = json.dumps(dados_os.__dict__)
             DadosProcessamentoWhatsAppDTO["\"DadosProcessamento\""] = json.dumps(dados.__dict__)
 
-            DadosProcessamentoReplace = str(DadosProcessamentoWhatsAppDTO).replace("'","").replace("[", "").replace("]", "")
-            acesso.InsereMensagemTemplate(DadosProcessamentoReplace, GuidOs)
+            dados_processamento_whats_replace = str(DadosProcessamentoWhatsAppDTO).replace("'","").replace("[", "").replace("]", "")
+            acesso.InsereMensagemTemplate(dados_processamento_whats_replace, guid_os)
 
         os.system("cls")
 
-        ChecaProcessamento(IdOSWhats, GuidOs)
+        checa_processamento(id_os_whats, guid_os)
 
         #Verificar agendamento
-        if agendaEnvio == "S":
-            acesso.AgendaEnvioOsWhatsApp(IdOSWhats, qtdeMinutos)
+        if agenda_envio == "S":
+            acesso.AgendaEnvioOsWhatsApp(id_os_whats, qtde_minutos)
+    
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
-
-def GetvariavelTemplate(idcomercial, idnterno):
+        with open(".\\Logs.txt", "a", encoding="ANSI") as new_arq:
+                new_arq.write(f"Ocorreu um erro: {str(e)}")
+                print(f"Ocorreu um erro: {str(e)}")
+                sys.exit(1)
+        
+def get_variavel_template(id_comercial, id_interno):
     try:
-        variaveisTemplate = acesso.GetMensagemTemplate(idcomercial,idnterno)
+        variaveis_template = acesso.GetMensagemTemplate(id_comercial,id_interno)
     except TypeError:
-        print("Erro: argumentos inválidos ou valor de retorno inválido")
-        return None
+        with open(".\\Logs.txt", "a", encoding="ANSI") as new_arq:
+                new_arq.write("Erro: argumentos inválidos ou valor de retorno inválido")
+                print("Erro: argumentos inválidos ou valor de retorno inválido")
+                sys.exit(1)
 
-    listaVariaveisTemplate=[]
+    lista_variaveis_template=[]
     inicio = 0
     try:
-        for key,value in enumerate(variaveisTemplate):
+        for key,value in enumerate(variaveis_template):
             if (value == '-'):
-                inicio = key+2
+                inicio = key + 2
             if (value == ','):
                 fim = key
-                listaVariaveisTemplate.append(variaveisTemplate[inicio:fim])
-            if (key+1 == len(variaveisTemplate)):
+                lista_variaveis_template.append(variaveis_template[inicio:fim])
+            if (key+1 == len(variaveis_template)):
                 fim = key+1
-                listaVariaveisTemplate.append(variaveisTemplate[inicio:fim])
+                lista_variaveis_template.append(variaveis_template[inicio:fim])
     except NameError:
         print("Erro: variáveis não definidas")
         return None
@@ -102,12 +110,12 @@ def GetvariavelTemplate(idcomercial, idnterno):
         print("Erro: índice fora do intervalo")
         return None
 
-    return listaVariaveisTemplate
+    return lista_variaveis_template
 
-def ChecaProcessamento(IdOSWhats, GuidOs):
+def checa_processamento(id_os_whats, guid_os):
     if os.path.isfile("Logs.txt"):
-        acesso.EstornaOSWhatsApp(IdOSWhats)
+        acesso.EstornaOSWhatsApp(id_os_whats)
         print("Verificar arquivo Logs.txt!!")
         sys.exit(1)
     else:
-        acesso.InformaTerminoProcessamento(GuidOs)
+        acesso.InformaTerminoProcessamento(guid_os)

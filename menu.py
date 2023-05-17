@@ -1,15 +1,14 @@
 import sys
 import json
 import acesso
-from PyQt5.QtGui import QPalette, QColor
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QGridLayout, QTableWidget, QTableWidgetItem, QLabel
+from PyQt5.QtGui import QPalette, QColor, QIntValidator
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QGridLayout, QTableWidget, QTableWidgetItem, QStyleFactory, QLabel
 from PyQt5 import QtCore 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMessageBox, QPushButton, QWidget, QSizePolicy
-from PyQt5.Qt import QStyleFactory
 
-
-titulos_colunas = ["OS's Pendentes"]
+titulos_colunas = ["OS's Pendentes", "Teste"]
+teste_coluna = []
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -38,7 +37,7 @@ class MainWindow(QWidget):
 
         self.button3 = QPushButton('Processamento' + '\n' + 'Pendente', self)
         self.button3.setGeometry(QtCore.QRect(10, 126, 93, 48))
-        #self.button3.clicked.connect(self.open_window)
+        self.button3.clicked.connect(self.window_reload)
 
         self.button4 = QPushButton('Estorna' + '\n' + 'OSWhatsApp', self)
         self.button4.setGeometry(QtCore.QRect(10, 184, 93, 48))
@@ -52,13 +51,9 @@ class MainWindow(QWidget):
         self.button6.setGeometry(QtCore.QRect(10, 300, 93, 48))
         self.button6.clicked.connect(self.window_RemoveAgendamento)
 
-        self.tabela = QTableWidget(self)
-        self.tabela.setFixedSize(1080, 780)
-        self.tabela.setColumnCount(1)
-        self.tabela.setHorizontalHeaderLabels(titulos_colunas)
-        self.tabela.setColumnWidth(0, 1100)
+        cria_tabela(self)
 
-        atualiza_tabela(self, teste)
+        atualiza_tabela(self, teste, "OS's Pendentes")
 
         layout.addWidget(self.tabela)
         layout.setAlignment(self.tabela, Qt.AlignRight)
@@ -75,31 +70,14 @@ class MainWindow(QWidget):
         
         layout = QGridLayout()
         self.new_window.setLayout(layout)
-        
-        buttonWinTemplate = QPushButton('idComercial', self)
-        layout.addWidget(buttonWinTemplate, 0, 0)
-        buttonWinTemplate.setContentsMargins(10, 10, 10, 10)
-        buttonWinTemplate.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-        buttonWinTemplate.setMinimumSize(100, 30)
-        buttonWinTemplate.setEnabled(False)
-        self.LabelIdComercial = QLineEdit(self)
-        layout.addWidget(self.LabelIdComercial, 0, 1)
-        self.LabelIdComercial.setMinimumSize(100,30)
-
-        buttonWinTemplate2 = QPushButton('idInterno', self)
-        layout.addWidget(buttonWinTemplate2, 1, 0)
-        buttonWinTemplate2.setContentsMargins(10, 10, 10, 10)
-        buttonWinTemplate2.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-        buttonWinTemplate2.setMinimumSize(100, 30)
-        buttonWinTemplate2.setEnabled(False)
-        self.LabelIdInterno = QLineEdit(self)
-        layout.addWidget(self.LabelIdInterno, 1, 1)
-        self.LabelIdInterno.setMinimumSize(100,30)
-        
-        buttonWinTemplateOk = QPushButton('Concluido')
+    
+        botao_template_idcomercial, self.LabelIdComercial = adiciona_button_label(layout, self, 'idComercial', 0)
+        botao_template_idinterno, self.LabelIdInterno = adiciona_button_label(layout, self, 'idInterno', 1)
+    
+        buttonWinTemplateOk = QPushButton('Concluído')
         layout.addWidget(buttonWinTemplateOk, 3, 3)
-        buttonWinTemplateOk.setMinimumSize(100, 50)
-        buttonWinTemplateOk.clicked.connect(self.get_template)  
+        buttonWinTemplateOk.setMinimumSize(100, 45)
+        buttonWinTemplateOk.clicked.connect(self.get_template) 
 
     def window_template_idcomercial(self):
         # Criação da nova janela        
@@ -112,23 +90,19 @@ class MainWindow(QWidget):
         layout = QGridLayout()
         self.new_window.setLayout(layout)
 
-        
-        buttonWinTemplate = QPushButton('idComercial', self)
-        layout.addWidget(buttonWinTemplate, 0, 0)
-        buttonWinTemplate.setContentsMargins(10, 10, 10, 10)
-        buttonWinTemplate.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-        buttonWinTemplate.setMinimumSize(100, 30)
-        buttonWinTemplate.setEnabled(False)
-        self.LabelIdComercial = QLineEdit(self)
-        layout.addWidget(self.LabelIdComercial, 0, 1)
-        self.LabelIdComercial.setMinimumSize(100,30)
-
+        botao_template_idcomercial, self.LabelIdComercial = adiciona_button_label(layout, self, 'idComercial', 0)
         
         buttonWinTemplateOk = QPushButton('Concluido')
         layout.addWidget(buttonWinTemplateOk, 3, 3)
-        buttonWinTemplateOk.setMinimumSize(100, 50)
+        buttonWinTemplateOk.setMinimumSize(100, 45)
         buttonWinTemplateOk.clicked.connect(self.get_template_idcomercial)
-        
+
+    def window_reload(self):
+        teste = acesso.GetOSProcessamentoPendente()
+
+        atualiza_tabela(self, teste, "OS's Pendentes")
+
+
     def window_estorna(self):
         # Criação da nova janela        
         self.new_window = QWidget()
@@ -140,21 +114,11 @@ class MainWindow(QWidget):
         layout = QGridLayout()
         self.new_window.setLayout(layout)
 
-        # Criação do botão "IdOS"
-        buttonWinTemplate = QPushButton('IdOS', self)
-        layout.addWidget(buttonWinTemplate, 0, 0)
-        buttonWinTemplate.setContentsMargins(10, 10, 10, 10)
-        buttonWinTemplate.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-        buttonWinTemplate.setMinimumSize(100, 30)
-        buttonWinTemplate.setEnabled(False)
-        self.LabelIdOIS = QLineEdit(self)
-        layout.addWidget(self.LabelIdOIS, 0, 1)
-        self.LabelIdOIS.setMinimumSize(100,30)
-
+        botao_template_idOS, self.LabelIdOIS = adiciona_button_label(layout, self, 'idOS', 0)
         
         buttonWinTemplateOk = QPushButton('Concluido')
         layout.addWidget(buttonWinTemplateOk, 3, 3)
-        buttonWinTemplateOk.setMinimumSize(100, 50)
+        buttonWinTemplateOk.setMinimumSize(100, 45)
         buttonWinTemplateOk.clicked.connect(self.get_estornaOS)
 
     def window_AgendaEnvioOsWhats(self):
@@ -168,32 +132,12 @@ class MainWindow(QWidget):
         layout = QGridLayout()
         self.new_window.setLayout(layout)
         
-        # Criação do botão "IdOS"
-        buttonWinTemplate = QPushButton('IdOS', self)
-        layout.addWidget(buttonWinTemplate, 0, 0)
-        buttonWinTemplate.setContentsMargins(10, 10, 10, 10)
-        buttonWinTemplate.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-        buttonWinTemplate.setMinimumSize(100, 30)
-        buttonWinTemplate.setEnabled(False)
-        self.LabelIdOIS = QLineEdit(self)
-        layout.addWidget(self.LabelIdOIS, 0, 1)
-        self.LabelIdOIS.setMinimumSize(100,30)
-
-         
-        buttonWinTemplate2 = QPushButton('Minutos', self)
-        layout.addWidget(buttonWinTemplate2, 1, 0)
-        buttonWinTemplate2.setContentsMargins(10, 10, 10, 10)
-        buttonWinTemplate2.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-        buttonWinTemplate2.setMinimumSize(100, 30)
-        buttonWinTemplate2.setEnabled(False)
-        self.LabelIdInterno = QLineEdit(self)
-        layout.addWidget(self.LabelIdInterno, 1, 1)
-        self.LabelIdInterno.setMinimumSize(100,30)        
-
+        botao_template_idOS, self.LabelIdOIS = adiciona_button_label(layout, self, 'IdOS', 0)
+        botao_template_idinterno, self.LabelIdInterno = adiciona_button_label(layout, self, 'Minutos', 1)              
         
         buttonWinTemplateOk = QPushButton('Concluido')
         layout.addWidget(buttonWinTemplateOk, 3, 3)
-        buttonWinTemplateOk.setMinimumSize(100, 50)
+        buttonWinTemplateOk.setMinimumSize(100, 45)
         buttonWinTemplateOk.clicked.connect(self.get_AgendaEnvioOsWhats)  
 
     def window_RemoveAgendamento(self):
@@ -208,20 +152,11 @@ class MainWindow(QWidget):
         self.new_window.setLayout(layout)
 
         # Criação do botão "IdOS"
-        buttonWinTemplate = QPushButton('IdOS', self)
-        layout.addWidget(buttonWinTemplate, 0, 0)
-        buttonWinTemplate.setContentsMargins(10, 10, 10, 10)
-        buttonWinTemplate.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-        buttonWinTemplate.setMinimumSize(100, 30)
-        buttonWinTemplate.setEnabled(False)
-        self.LabelIdOIS = QLineEdit(self)
-        layout.addWidget(self.LabelIdOIS, 0, 1)
-        self.LabelIdOIS.setMinimumSize(100,30)
-
+        botao_template_idOS, self.LabelIdOIS = adiciona_button_label(layout, self, 'IdOS', 0)
         
         buttonWinTemplateOk = QPushButton('Concluido')
         layout.addWidget(buttonWinTemplateOk, 3, 3)
-        buttonWinTemplateOk.setMinimumSize(100, 50)
+        buttonWinTemplateOk.setMinimumSize(100, 45)
         buttonWinTemplateOk.clicked.connect(self.get_RemoveAgendamento)  
     
     def get_RemoveAgendamento(self):
@@ -262,15 +197,23 @@ class MainWindow(QWidget):
         idComercial = self.LabelIdComercial.text()
         idInterno = self.LabelIdInterno.text()
         teste2 = acesso.GetMensagemTemplateMenu(idComercial, idInterno)
+
+        if (teste2 == "400"):
+            QMessageBox.critical(self, "Mensagem de erro", "Template não encontrado!!")
+        else:
+            atualiza_tabela(self, teste2, "Template")
         
-        atualiza_tabela(self, teste2)
         self.new_window.close()    
     
     def get_template_idcomercial(self):
         idComercial = self.LabelIdComercial.text()
         teste2 = acesso.GetMensagensTemplatesByIdComercialMenu(idComercial)
+
+        if (teste2 == "400"):
+            QMessageBox.critical(self, "Mensagem de erro", "Template não encontrado!!")
+        else:
+            atualiza_tabela(self, teste2, "Templates")
         
-        atualiza_tabela(self, teste2)
         self.new_window.close()
 
 def set_dark_mode(window):
@@ -294,25 +237,54 @@ def set_dark_mode(window):
     palette.setColor(QPalette.HighlightedText, QColor(255, 255, 255))
     window.setPalette(palette)
 
-def atualiza_tabela(self, teste):
-        #Quantidade de casos no JSON
+def cria_tabela(self):
+    self.tabela = QTableWidget(self)
+    self.tabela.setFixedSize(1080, 780)
+    self.tabela.setColumnCount(1)
+    self.tabela.setColumnWidth(0, 1100)
+    self.tabela.move(0, 10)
 
-        data = json.loads(teste)
+def atualiza_tabela(self, teste, titulo):
 
-        #Colocando os valores nas colunas
-        if type(data) == list:
-            self.tabela.setRowCount(len(data))
-            for row,cell_data in enumerate(data):
-                self.tabela.setRowHeight(row, 380) #setando o tamanho das linhas em 300px
-                item = QTableWidgetItem(str(cell_data).replace(",", "\n"))
-                self.tabela.setItem(row, 0, item)
-        else:      
-            self.tabela.setRowCount(1)        
-            self.tabela.clear()
-            self.tabela.setRowHeight(0, 390) #setando o tamanho das linhas em 300px
-            item = QTableWidgetItem(teste)
-            self.tabela.setItem(0, 0, item)
+    #Quantidade de casos no JSON
+    data = json.loads(teste)
+    teste_coluna.append(titulo)
+    self.tabela.setHorizontalHeaderLabels(teste_coluna)
+    
+    #Colocando os valores nas colunas
+    if type(data) == list:
+        self.tabela.setRowCount(len(data))
+        for row,cell_data in enumerate(data):
+            self.tabela.setRowHeight(row, 380) #setando o tamanho das linhas em 300px
+            item = QTableWidgetItem(str(cell_data).replace(",", "\n"))
+            self.tabela.setItem(row, 0, item)
+    else:      
+        self.tabela.setRowCount(1)        
+        self.tabela.clear()
+        self.tabela.setHorizontalHeaderLabels(teste_coluna)
+        self.tabela.setRowHeight(0, 390) #setando o tamanho das linhas em 300px
+        item = QTableWidgetItem(teste)
+        self.tabela.setItem(0, 0, item)
+    
+    teste_coluna.clear()        
 
+def adiciona_button_label(layout, self, text, row):
+    button = QPushButton(text, self)
+    layout.addWidget(button, row, 0)
+    button.setContentsMargins(10, 10, 10, 10)
+    button.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+    button.setMinimumSize(100, 30)
+    button.setEnabled(False)
+        
+    label = QLineEdit(self)
+    layout.addWidget(label, row, 1)
+    label.setMinimumSize(100, 30)
+
+    # Define o validador para aceitar somente números inteiros
+    validator = QIntValidator(self)
+    label.setValidator(validator)
+        
+    return button, label
 
 def menu():
     app = QApplication(sys.argv)

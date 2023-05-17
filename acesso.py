@@ -2,7 +2,6 @@ import requests
 import json
 import sys
 import os
-import menu
 import senha
 
 
@@ -62,7 +61,7 @@ def GetMensagensTemplatesByIdComercialMenu(idComercial): #GET Menu
     if(resposta.status_code == 200):
         return(json.dumps(resposta.json(), indent=3))
     else:
-        return(resposta.text)
+        return(str(resposta.status_code))
 
 def EstornaOSWhatsApp(idos): #DELETE
     url = 'https://levydataprocessing.smarapd.com.br/api/ProcessaTemplateOSWhatsApp/EstornaOSWhatsApp'
