@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="pt-BR" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>acesso module &mdash; WhatsApp Levy 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            WhatsApp Levy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">acesso module</a><ul>
+<li><a class="reference internal" href="#acesso.agenda_envio_os_whatsapp"><code class="docutils literal notranslate"><span class="pre">agenda_envio_os_whatsapp()</span></code></a></li>
+<li><a class="reference internal" href="#acesso.agenda_envio_os_whatsapp_menu"><code class="docutils literal notranslate"><span class="pre">agenda_envio_os_whatsapp_menu()</span></code></a></li>
+<li><a class="reference internal" href="#acesso.estorna_os_whatsapp"><code class="docutils literal notranslate"><span class="pre">estorna_os_whatsapp()</span></code></a></li>
+<li><a class="reference internal" href="#acesso.get_mensagem_template"><code class="docutils literal notranslate"><span class="pre">get_mensagem_template()</span></code></a></li>
+<li><a class="reference internal" href="#acesso.get_mensagem_template_menu"><code class="docutils literal notranslate"><span class="pre">get_mensagem_template_menu()</span></code></a></li>
+<li><a class="reference internal" href="#acesso.get_mensagens_templates_by_id_comercial_menu"><code class="docutils literal notranslate"><span class="pre">get_mensagens_templates_by_id_comercial_menu()</span></code></a></li>
+<li><a class="reference internal" href="#acesso.get_os_processamento_pendente"><code class="docutils literal notranslate"><span class="pre">get_os_processamento_pendente()</span></code></a></li>
+<li><a class="reference internal" href="#acesso.informa_termino_processamento"><code class="docutils literal notranslate"><span class="pre">informa_termino_processamento()</span></code></a></li>
+<li><a class="reference internal" href="#acesso.inicia_os_whatsapp"><code class="docutils literal notranslate"><span class="pre">inicia_os_whatsapp()</span></code></a></li>
+<li><a class="reference internal" href="#acesso.insere_mensagem_template"><code class="docutils literal notranslate"><span class="pre">insere_mensagem_template()</span></code></a></li>
+<li><a class="reference internal" href="#acesso.remove_agendamento_envio_os_whatsapp"><code class="docutils literal notranslate"><span class="pre">remove_agendamento_envio_os_whatsapp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WhatsApp Levy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">acesso module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/apidoc/acesso.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-acesso">
+<span id="acesso-module"></span><h1>acesso module<a class="headerlink" href="#module-acesso" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="acesso.agenda_envio_os_whatsapp">
+<span class="sig-prename descclassname"><span class="pre">acesso.</span></span><span class="sig-name descname"><span class="pre">agenda_envio_os_whatsapp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_os_whats</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qtde_minutos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acesso.agenda_envio_os_whatsapp" title="Permalink to this definition"></a></dt>
+<dd><p>Agenda o envio de uma ordem de serviço do WhatsApp usando uma solicitação PATCH.</p>
+<dl class="simple">
+<dt>Parâmetros:</dt><dd><p>id_os_whats (str): O ID da ordem de serviço do WhatsApp.
+qtde_minutos (str): A quantidade de minutos para agendar o envio (opcional).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acesso.agenda_envio_os_whatsapp_menu">
+<span class="sig-prename descclassname"><span class="pre">acesso.</span></span><span class="sig-name descname"><span class="pre">agenda_envio_os_whatsapp_menu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_os_whats</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qtde_minutos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acesso.agenda_envio_os_whatsapp_menu" title="Permalink to this definition"></a></dt>
+<dd><p>Agenda o envio de uma ordem de serviço do WhatsApp com opção de menu usando uma solicitação PATCH.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>id_os_whats (str): O ID da ordem de serviço do WhatsApp.
+qtde_minutos (str): A quantidade de minutos para agendar o envio (opcional).</p>
+</dd>
+<dt>Returns:</dt><dd><p>str: O código de status da resposta em formato de string se for bem-sucedido, caso contrário, o texto da resposta.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acesso.estorna_os_whatsapp">
+<span class="sig-prename descclassname"><span class="pre">acesso.</span></span><span class="sig-name descname"><span class="pre">estorna_os_whatsapp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_os_whats</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acesso.estorna_os_whatsapp" title="Permalink to this definition"></a></dt>
+<dd><p>Cancela uma ordem de serviço do WhatsApp usando uma solicitação DELETE.</p>
+<dl class="simple">
+<dt>Parâmetros:</dt><dd><p>id_os_whats (str): O ID da ordem de serviço do WhatsApp.</p>
+</dd>
+<dt>Return:</dt><dd><p>Retorna o status da requisição.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acesso.get_mensagem_template">
+<span class="sig-prename descclassname"><span class="pre">acesso.</span></span><span class="sig-name descname"><span class="pre">get_mensagem_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_comercial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_interno</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acesso.get_mensagem_template" title="Permalink to this definition"></a></dt>
+<dd><p>Realiza um get do template do idComercial e idInterno passado por parâmetro.</p>
+<dl class="simple">
+<dt>Parâmetros:</dt><dd><p>id_comercial (str): O ID comercial da mensagem.
+id_interno (str): O ID interno da mensagem.</p>
+</dd>
+<dt>Return:</dt><dd><p>retorna somente o campo (Observacao), onde é utilizado na mensagem do template, caso 
+de erro na requisição o mesmo é finalizado e informado o erro.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acesso.get_mensagem_template_menu">
+<span class="sig-prename descclassname"><span class="pre">acesso.</span></span><span class="sig-name descname"><span class="pre">get_mensagem_template_menu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_comercial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_interno</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acesso.get_mensagem_template_menu" title="Permalink to this definition"></a></dt>
+<dd><p>Recebe dois parametros para realizar o get da mensagem do templante.</p>
+<dl class="simple">
+<dt>Parâmetros:</dt><dd><p>id_comercial (str): O ID comercial da mensagem.
+id_interno (str): O ID interno da mensagem.</p>
+</dd>
+<dt>Return:</dt><dd><p>Retorna um JSON da requisição GET para ser exibido no menu, caso aconteça o erro é informado o status do mesmo.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acesso.get_mensagens_templates_by_id_comercial_menu">
+<span class="sig-prename descclassname"><span class="pre">acesso.</span></span><span class="sig-name descname"><span class="pre">get_mensagens_templates_by_id_comercial_menu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_comercial</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acesso.get_mensagens_templates_by_id_comercial_menu" title="Permalink to this definition"></a></dt>
+<dd><p>Obtém os modelos de template associados a um ID comercial usando uma solicitação GET.</p>
+<dl class="simple">
+<dt>Parâmetros:</dt><dd><p>id_comercial (str): O ID comercial.</p>
+</dd>
+<dt>Return:</dt><dd><p>Retorna o resultado em formato JSON para ser visualizado no menu.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acesso.get_os_processamento_pendente">
+<span class="sig-prename descclassname"><span class="pre">acesso.</span></span><span class="sig-name descname"><span class="pre">get_os_processamento_pendente</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#acesso.get_os_processamento_pendente" title="Permalink to this definition"></a></dt>
+<dd><p>Obtém as ordens de serviço de processamento pendentes usando uma solicitação GET.</p>
+<dl class="simple">
+<dt>Return:</dt><dd><p>Retorna em um JSON os casos que estão pendentes no sistema.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acesso.informa_termino_processamento">
+<span class="sig-prename descclassname"><span class="pre">acesso.</span></span><span class="sig-name descname"><span class="pre">informa_termino_processamento</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">guid_os</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acesso.informa_termino_processamento" title="Permalink to this definition"></a></dt>
+<dd><p>Informa o término do processamento de uma ordem de serviço do WhatsApp usando uma solicitação PATCH.</p>
+<dl class="simple">
+<dt>Parâmetros:</dt><dd><p>guid_os (str): O GUID da ordem de serviço do WhatsApp.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acesso.inicia_os_whatsapp">
+<span class="sig-prename descclassname"><span class="pre">acesso.</span></span><span class="sig-name descname"><span class="pre">inicia_os_whatsapp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_os_whats</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_os_eletronico</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acesso.inicia_os_whatsapp" title="Permalink to this definition"></a></dt>
+<dd><p>Recebe dois parârametros para realizar a requisição de POST</p>
+<dl class="simple">
+<dt>Parâmetros:</dt><dd><p>id_os_whats (str): O ID da ordem de serviço do WhatsApp.
+id_os_eletronico (str): O ID da ordem de serviço eletrônico (opcional).</p>
+</dd>
+<dt>Return:</dt><dd><p>Retorna uma GUID de inicialização da OS do WhatsApp, ou caso aconteça um erro na requisição é cria um arquivo com o nome 
+“Logs.txt”, informando os detalhes e o retorno da requisição.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acesso.insere_mensagem_template">
+<span class="sig-prename descclassname"><span class="pre">acesso.</span></span><span class="sig-name descname"><span class="pre">insere_mensagem_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">processa_msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">guid_os</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acesso.insere_mensagem_template" title="Permalink to this definition"></a></dt>
+<dd><p>Recebe por parâmetros a mensagem em JSON e a guid de iniciação da OS, para a geração a mensagem
+de template e os dados variaveis.</p>
+<dl class="simple">
+<dt>Parâmetros:</dt><dd><p>processa_msg (str): O modelo de mensagem em formato JSON.
+guid_os (str): O GUID da ordem de serviço do WhatsApp.</p>
+</dd>
+<dt>Return:</dt><dd><p>Caso a requisição seja concluida, é gerado um arquivo “ProcessamentoLogs.txt”, no qual é passado
+o nome do cliente, telefone, contato e a resposta da requisição. Se a requisição ocorreu um erro
+é gerado um arquivo com o nome “Logs.txt” onde é informado a resposta e GuidOsWhats da OS.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acesso.remove_agendamento_envio_os_whatsapp">
+<span class="sig-prename descclassname"><span class="pre">acesso.</span></span><span class="sig-name descname"><span class="pre">remove_agendamento_envio_os_whatsapp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_os_whats</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acesso.remove_agendamento_envio_os_whatsapp" title="Permalink to this definition"></a></dt>
+<dd><p>Remove o agendamento de envio de uma ordem de serviço do WhatsApp usando uma solicitação PATCH.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>id_os_whats (str): O ID da ordem de serviço do WhatsApp.</p>
+</dd>
+<dt>Returns:</dt><dd><p>str: O texto da resposta.</p>
+</dd>
+<dt>Raises:</dt><dd><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Rainer Ceribelli.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

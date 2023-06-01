@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="pt-BR" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>processamento module &mdash; WhatsApp Levy 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            WhatsApp Levy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">processamento module</a><ul>
+<li><a class="reference internal" href="#processamento.checa_processamento"><code class="docutils literal notranslate"><span class="pre">checa_processamento()</span></code></a></li>
+<li><a class="reference internal" href="#processamento.get_variavel_template"><code class="docutils literal notranslate"><span class="pre">get_variavel_template()</span></code></a></li>
+<li><a class="reference internal" href="#processamento.insere_dados_whatsapp"><code class="docutils literal notranslate"><span class="pre">insere_dados_whatsapp()</span></code></a></li>
+<li><a class="reference internal" href="#processamento.processa_arquivo"><code class="docutils literal notranslate"><span class="pre">processa_arquivo()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WhatsApp Levy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">processamento module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/apidoc/processamento.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-processamento">
+<span id="processamento-module"></span><h1>processamento module<a class="headerlink" href="#module-processamento" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="processamento.checa_processamento">
+<span class="sig-prename descclassname"><span class="pre">processamento.</span></span><span class="sig-name descname"><span class="pre">checa_processamento</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_os_whats</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">guid_os</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#processamento.checa_processamento" title="Permalink to this definition"></a></dt>
+<dd><p>Verifica o se o processamento foi concluido e informa o termino dele, caso o mesmo de erro é gerado um
+arquivo log e estornado a OS do WhatsApp.</p>
+<dl class="simple">
+<dt>Parâmetros:</dt><dd><p>id_os_whats (int): O ID da ordem de serviço do WhatsApp.
+guid_os (str): O GUID(IdIndividuo) da ordem de serviço do WhatsApp.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="processamento.get_variavel_template">
+<span class="sig-prename descclassname"><span class="pre">processamento.</span></span><span class="sig-name descname"><span class="pre">get_variavel_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_comercial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_interno</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#processamento.get_variavel_template" title="Permalink to this definition"></a></dt>
+<dd><p>Obtém as variáveis de um template, exemplo (nome, vencimento, etc).</p>
+<dl class="simple">
+<dt>Parâmetros:</dt><dd><p>id_comercial (int): O ID comercial do template.
+id_interno (int): O ID interno do template.</p>
+</dd>
+<dt>Returns:</dt><dd><p>list: Retorna uma lista de variáveis do template.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="processamento.insere_dados_whatsapp">
+<span class="sig-prename descclassname"><span class="pre">processamento.</span></span><span class="sig-name descname"><span class="pre">insere_dados_whatsapp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_os_whats</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agenda_envio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qtde_minutos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#processamento.insere_dados_whatsapp" title="Permalink to this definition"></a></dt>
+<dd><p>Insere os dados do WhatsApp utilizando o dicionario gerado na função processa_arquivo e agenda o envio, se necessário.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>id_os_whats (int): O ID da ordem de serviço do WhatsApp.
+agenda_envio (str): Indica se o envio deve ser agendado ou não (“S” ou “N”).
+qtde_minutos (int): A quantidade de minutos para agendamento do envio.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="processamento.processa_arquivo">
+<span class="sig-prename descclassname"><span class="pre">processamento.</span></span><span class="sig-name descname"><span class="pre">processa_arquivo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arquivo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#processamento.processa_arquivo" title="Permalink to this definition"></a></dt>
+<dd><p>Processa um arquivo CSV e armazena os dados em um dicionário, utilizando o campo CodBarra2Via como chave.</p>
+<p>Parâmetros:
+- arquivo (str): O caminho para o arquivo CSV a ser processado.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Rainer Ceribelli.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
