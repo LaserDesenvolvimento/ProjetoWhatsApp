@@ -48,8 +48,8 @@ python whatsApp.py
 
 A aplicação possui as seguintes funcionalidades:
 
-- Mensagem Template: Abre uma nova janela para a criação de uma mensagem template.
-- Template Comercial: Abre uma nova janela para a criação de um template comercial.
+- Mensagem Template: Abre uma nova janela para buscar uma mensagem de template.
+- Template Comercial: Abre uma nova janela para buscar uma mensagem de template comercial.
 - Processamento Pendente: Atualiza a tabela de processamento pendente na janela principal.
 - Estorna OSWhatsApp: Abre uma nova janela para estornar uma OS no WhatsApp.
 - Agendamento: Abre uma nova janela para agendar o envio de uma OS no WhatsApp.
@@ -65,10 +65,3 @@ Contribuições são bem-vindas! Se você quiser contribuir para este projeto, s
 4. Commit suas alterações: `git commit -m 'Minha nova feature'`.
 5. Faça push para o branch: `git push origin minha-feature`.
 6. Abra um pull request.
-
-## Licença
-
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-```
-
-Certifique-se de atualizar as seções "Requisitos", "Instalação" e "Contribuição" de acordo com as informações relevantes do seu projeto. Além disso, adicione uma seção "Licença" com a licença apropriada para o seu projeto.
