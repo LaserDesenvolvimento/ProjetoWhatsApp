@@ -431,10 +431,7 @@ def cria_tabela(self):
     self.tabela.setColumnCount(1)
 
     # Define a largura da primeira coluna da tabela
-    self.tabela.setColumnWidth(0, 1100)
-
-    # Define a posição da tabela na janela
-    self.tabela.move(0, 10)
+    self.tabela.setColumnWidth(0, 1080)
 
 def atualiza_tabela(self, teste, titulo):
     """

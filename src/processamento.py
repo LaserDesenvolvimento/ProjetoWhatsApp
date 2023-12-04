@@ -7,16 +7,9 @@ from io import StringIO
 import os
 
 arquivo_dados = {}
-DadosProcessamentoWhatsAppDTO = {}
 separador = ';'
 
 def processa_arquivo(arquivo):
-    """
-    Processa um arquivo CSV e armazena os dados em um dicionário, utilizando o campo CodBarra2Via como chave.
-
-    Parâmetros:
-    - arquivo (str): O caminho para o arquivo CSV a ser processado.
-    """
     try:
         with open(arquivo, encoding='ANSI') as csvf:
             # Lê o arquivo CSV como um dicionário
@@ -40,57 +33,62 @@ def processa_arquivo(arquivo):
         exit(1)
                 
 def insere_dados_whatsapp(id_os_whats, agenda_envio, qtde_minutos):
-    """
-    Insere os dados do WhatsApp utilizando o dicionario gerado na função processa_arquivo e agenda o envio, se necessário.
-
-    Args:
-        id_os_whats (int): O ID da ordem de serviço do WhatsApp.
-        agenda_envio (str): Indica se o envio deve ser agendado ou não ("S" ou "N").
-        qtde_minutos (int): A quantidade de minutos para agendamento do envio.
-
-    """
     try:
         # Obtém os dados necessários para inserir no WhatsApp
         cod_barra_2via = list(arquivo_dados.keys())[0]
-        id_os_2via = cod_barra_2via[:8]
-        id_os_eletronico = arquivo_dados[str(id_os_2via).zfill(8) + f'{(1):06}']['idoseletronico']
+        #id_os_2via = cod_barra_2via[:8]
+        id_os_eletronico = arquivo_dados[cod_barra_2via]['idoseletronico']
 
          # Inicia a ordem de serviço no WhatsApp
         dados_os = cliente.OsWhatsAppProcessamentoDTO(acesso.inicia_os_whatsapp(id_os_whats, id_os_eletronico).replace('"',""))
         guid_os = dados_os.GuidOsWhatsAppEnvio
 
         # Obtém as informações do template
-        id_comercial = arquivo_dados[str(id_os_2via).zfill(8) + f'{(1):06}']['idcomercial']
-        id_interno = arquivo_dados[str(id_os_2via).zfill(8) + f'{(1):06}']['idinterno']
+        id_comercial = arquivo_dados[cod_barra_2via]['idcomercial']
+        id_interno = arquivo_dados[cod_barra_2via]['idinterno']
         busca_template = get_variavel_template(id_comercial, id_interno)
 
-        # Percorre os dados e insere na API
-        for i in range(len(arquivo_dados)):
-            variaveis_templates = []
-            for x in range(len(busca_template)):
-                variaveis_templates.append(arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}'][busca_template[x]])
+        # Setando as variaveis para iniciar a inserção dos dados
+        dados_processamento_whats = []
+        lote = 20
+        total_casos = len(arquivo_dados)
 
-            mensagem_template = [separador.join(variaveis_templates)]
+        for i in range(total_casos):
+            variaveis_templates = []
+            cod_2via = list(arquivo_dados.keys())[i]
+            
+            for x in range(len(busca_template)):
+                variaveis_templates.append(arquivo_dados[cod_2via][busca_template[x]])
+
+            mensagem_template = separador.join(variaveis_templates).replace("[","").replace("]","")
 
             dados = cliente.DadosProcessamento(
-                arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}']['guid'],
-                arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}']['nome'],
-                arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}']['contatodestino'],
+                arquivo_dados[cod_2via]['guid'],
+                arquivo_dados[cod_2via]['nome'],
+                arquivo_dados[cod_2via]['contatodestino'],
                 mensagem_template,
-                arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}']['nrodocumento'],
-                arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}']['codbarra2via'],
-                arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}']['tradutor'],
-                arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}']['codigopix'],
-                arquivo_dados[str(id_os_2via).zfill(8) + f'{(i + 1):06}']['vencimento']
+                arquivo_dados[cod_2via]['nrodocumento'],
+                arquivo_dados[cod_2via]['codbarra2via'],
+                arquivo_dados[cod_2via]['tradutor'],
+                arquivo_dados[cod_2via]['codigopix'],
+                arquivo_dados[cod_2via]['vencimento']
             )
 
-            # Prepara os dados para inserção
-            DadosProcessamentoWhatsAppDTO["\"OsWhatsAppEnvio\""] = json.dumps(dados_os.__dict__)
-            DadosProcessamentoWhatsAppDTO["\"DadosProcessamento\""] = json.dumps(dados.__dict__)
-            dados_processamento_whats_replace = str(DadosProcessamentoWhatsAppDTO).replace("'","").replace("[", "").replace("]", "")
+            dados_os_json = json.dumps(dados_os.__dict__)
+            dados_json = json.dumps(dados.__dict__)
 
-            # Insere a mensagem no WhatsApp
-            acesso.insere_mensagem_template(dados_processamento_whats_replace, guid_os)
+            novo_dados_whatsapp = {
+                "\"OsWhatsAppEnvio\"": dados_os_json,
+                "\"DadosProcessamento\"": dados_json
+            }
+
+            dados_processamento_whats.append(novo_dados_whatsapp)
+
+            if (i + 1) % lote == 0 or (i + 1) == total_casos:
+                dados_json = str(dados_processamento_whats).replace("\'", "")
+
+                acesso.insere_mensagem_template(dados_json, guid_os)
+                dados_processamento_whats = []
 
         os.system("cls")
 
@@ -109,34 +107,27 @@ def insere_dados_whatsapp(id_os_whats, agenda_envio, qtde_minutos):
                 sys.exit(1)
         
 def get_variavel_template(id_comercial, id_interno):
-    """
-    Obtém as variáveis de um template, exemplo (nome, vencimento, etc).
-
-    Parâmetros:
-        id_comercial (int): O ID comercial do template.
-        id_interno (int): O ID interno do template.
-
-    Returns:
-        list: Retorna uma lista de variáveis do template.
-
-    """
     try:
         # Obtém as variáveis do template
         variaveis_template = acesso.get_mensagem_template(id_comercial,id_interno)
 
-        lista_variaveis_template=[]
-        inicio = 0
-        for key,value in enumerate(variaveis_template):
-            if (value == '-'):
-                inicio = key + 2
-            if (value == ','):
-                fim = key
-                lista_variaveis_template.append(variaveis_template[inicio:fim])
-            if (key+1 == len(variaveis_template)):
-                fim = key+1
-                lista_variaveis_template.append(variaveis_template[inicio:fim])
+        if not(variaveis_template is None):
+            lista_variaveis_template=[]
+            inicio = 0
+            for key,value in enumerate(variaveis_template):
+                if (value == '-'):
+                    inicio = key + 2
+                if (value == ','):
+                    fim = key
+                    lista_variaveis_template.append(variaveis_template[inicio:fim])
+                if (key+1 == len(variaveis_template)):
+                    fim = key+1
+                    lista_variaveis_template.append(variaveis_template[inicio:fim])
     
-        return lista_variaveis_template
+            return lista_variaveis_template
+        else:
+            lista_variaveis_template = ""
+            return lista_variaveis_template
 
     except TypeError:
         # Tratamento de erro e registro de log
@@ -155,15 +146,6 @@ def get_variavel_template(id_comercial, id_interno):
         return None
 
 def checa_processamento(id_os_whats, guid_os):
-    """
-    Verifica o se o processamento foi concluido e informa o termino dele, caso o mesmo de erro é gerado um
-    arquivo log e estornado a OS do WhatsApp.
-
-    Parâmetros:
-        id_os_whats (int): O ID da ordem de serviço do WhatsApp.
-        guid_os (str): O GUID(IdIndividuo) da ordem de serviço do WhatsApp.
-
-    """
     if os.path.isfile("Logs.txt"):
         # Estorna a ordem de serviço do WhatsApp e trata o arquivo de log
         acesso.estorna_os_whatsapp(id_os_whats)
