@@ -15,7 +15,7 @@ def main():
     """
     try:
         #arquivo = r'C:\\Users\\rcrustiguel\\Documents\\GitHub\\ProjetoWhatsApp\\src\\CSV_WhatsApp.csv'
-        #id_os_whats = 1132658
+        #id_os_whats = 1166562
         #agenda_envio = "N"
         #qtde_minutos = "N"
         

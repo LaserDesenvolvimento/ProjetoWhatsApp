@@ -67,6 +67,7 @@ def insere_dados_whatsapp(id_os_whats, agenda_envio, qtde_minutos):
                 arquivo_dados[cod_2via]['nome'],
                 arquivo_dados[cod_2via]['contatodestino'],
                 mensagem_template,
+                arquivo_dados[cod_2via]['cpfcnpj'],
                 arquivo_dados[cod_2via]['nrodocumento'],
                 arquivo_dados[cod_2via]['codbarra2via'],
                 arquivo_dados[cod_2via]['tradutor'],

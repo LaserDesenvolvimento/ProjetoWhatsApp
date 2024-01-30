@@ -1,10 +1,12 @@
 from datetime import datetime
+import re
 class DadosProcessamento():    
-    def __init__(self, guid, nome, contato_destino, mensagem_template, nro_documento, cod_barra_2via, tradutor, codigo_pix, vencimento):
+    def __init__(self, guid, nome, contato_destino, mensagem_template, cpf_cnpj, nro_documento, cod_barra_2via, tradutor, codigo_pix, vencimento):
          self.IdIndividuo = guid
          self.Nome = nome
          self.ContatoDestino = contato_destino
          self.DadosMensagemTemplate = mensagem_template
+         self.CpfCnpj = self.remover_caracteres_especiais(cpf_cnpj)
          self.dcNroDocumento = nro_documento
          self.cdControle = cod_barra_2via
          self.Tradutor = tradutor
@@ -23,6 +25,11 @@ class DadosProcessamento():
         data_formatada_str = data_formatada.strftime("%Y-%m-%d") + "T00:00:00.000Z"
         
         return data_formatada_str
+    
+    def remover_caracteres_especiais(self, cpf_cnpj):
+        cpf_sem_especiais = re.sub('[^0-9]', '', cpf_cnpj)
+
+        return cpf_sem_especiais
 
 class OsWhatsAppProcessamentoDTO():
     def __init__(self, guid_os_whats):
